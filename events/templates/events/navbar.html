@@ -19,9 +19,10 @@
             <a class="nav-link" href="{% url 'list_venue' %}">Venues</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <form class="form-inline my-2 my-lg-0" method=POST action="{% url 'search_venues' %}">
+          {% csrf_token %}
+        <input class="form-control mr-sm-2" type="search" placeholder="Search Venues" aria-label="Search" name="searched">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
       </form>
     </div>
   </nav>
