@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
@@ -7,6 +7,15 @@ from .models import Event, Venue
 from .forms import VenueForm
 
 # Create your views here.
+
+def update_venue(request, venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    form = VenueForm(request.POST or None, instance=venue)
+    if form.is_valid():
+        form.save()
+        return redirect('list_venue')
+
+    return render(request, 'events/update_venue.html', {'venue': venue, 'form': form})
 
 def search_venues(request):
     if request.method == "POST":
