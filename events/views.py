@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from .models import Event, Venue
 from .forms import VenueForm, EventForm
 
+from django.core.paginator import Paginator
+
 # Create your views here.
 
 def delete_venue(request, venue_id):
@@ -63,8 +65,12 @@ def show_venue(request, venue_id):
 
 
 def list_venues(request):
-    list_venue = Venue.objects.all()
-    return render(request, 'events/venue.html', {'list_venue': list_venue})
+    list_venue = Venue.objects.all().order_by('name')
+
+    p = Paginator(Venue.objects.all(), 5)
+    page = request.GET.get('page')
+    venues = p.get_page(page)
+    return render(request, 'events/venue.html', {'list_venue': list_venue, 'venues': venues})
 
 def add_venue(request):
     submitted = False
@@ -80,7 +86,7 @@ def add_venue(request):
     return render(request, 'events/add_venue.html', {'form': form, 'submitted': submitted})
 
 def all_events(request):
-    event_list = Event.objects.all()
+    event_list = Event.objects.all().order_by('event_date')
     return render(request, 'events/event_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
