@@ -19,9 +19,11 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
+    path('members/', include('django.contrib.auth.urls')),
+    path('members/', include('members.urls')),
 ]
 
 admin.site.site_header = "Dog Aunt Admin"
-admin.site.site_title = "Browser Title"
+admin.site.site_title = "Br owser Title"
 admin.site.index_title = " Welcome To The Admin Area"
 
