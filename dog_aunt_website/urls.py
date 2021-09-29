@@ -20,3 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')),
 ]
+
+admin.site.site_header = "Dog Aunt Admin"
+admin.site.site_title = "Browser Title"
+admin.site.index_title = " Welcome To The Admin Area"
+
