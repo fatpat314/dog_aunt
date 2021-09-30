@@ -7,19 +7,27 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' '2021' 'March'%}">March</a>
+          <a class="nav-link" href="{% url 'home' '2021' 'March'%}">Calendar</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_events' %}">Events</a>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Events
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'list_events' %}">All Events</a>
+                <a class="dropdown-item" href="{% url 'add_event' %}">Add Events</a>
+            </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_event' %}">Add Events</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_venue' %}">Add Venue</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'list_venue' %}">Venues</a>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Venues
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'list_venue' %}">All Venues</a>
+                <a class="dropdown-item" href="{% url 'add_venue' %}">Add Venue</a>
+            </div>
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item">
