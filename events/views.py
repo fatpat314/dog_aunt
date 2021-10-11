@@ -4,7 +4,7 @@ from calendar import HTMLCalendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import Event, Venue
-from .forms import VenueForm, EventForm
+from .forms import VenueForm, EventForm, EventFormAdmin
 
 from django.core.paginator import Paginator
 
@@ -22,7 +22,11 @@ def delete_event(request, event_id):
 
 def update_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    form = EventForm(request.POST or None, instance=event)
+    if request.user.is_superuser:
+        form = EventFormAdmin(request.POST or None, instance=event)
+    else:
+        form = EventForm(request.POST or None, instance=event)
+
     if form.is_valid():
         form.save()
         return redirect('list_events')
@@ -32,11 +36,23 @@ def update_event(request, event_id):
 def add_event(request):
     submitted = False
     if request.method == "POST":
-        form =  EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add_event?submitted=True')
+        if request.user.is_superuser:
+            form = EventFormAdmin(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
+        else:
+            form = EventForm(request.POST)
+            if form.is_valid():
+                event = form.save(commit=False)
+                event.manager = request.user
+                event.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
     else:
+        if request.user.is_superuser:
+            form = EventFormAdmin
+        else:
+            form = EventForm
         form = EventForm
         if 'submitted' in request.GET:
             submitted = True
@@ -93,7 +109,7 @@ def all_events(request):
     return render(request, 'events/event_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime('%B')):
-    name = "John"
+    name = request.user
     month = month.capitalize()
     # Convert month from name to number
     month_number = list(calendar.month_name).index(month)
