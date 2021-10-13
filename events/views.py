@@ -5,6 +5,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from .models import Event, Venue
 from .forms import VenueForm, EventForm, EventFormAdmin
+from django.contrib import messages
 
 from django.core.paginator import Paginator
 
@@ -17,8 +18,13 @@ def delete_venue(request, venue_id):
 
 def delete_event(request, event_id):
     event = Event.objects.get(pk=event_id)
-    event.delete()
-    return redirect('list_events')
+    if request.user == event.manager:
+        event.delete()
+        messages.success(request, ("Event Deleted!"))
+        return redirect('list_events')
+    else:
+        messages.success(request, ("You are not authorized to delete this event."))
+        return redirect('list-events')
 
 def update_event(request, event_id):
     event = Event.objects.get(pk=event_id)
