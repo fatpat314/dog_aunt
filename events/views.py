@@ -131,7 +131,7 @@ def home(request, year=datetime.now().year, month=datetime.now().strftime('%B'))
     current_year = now.year
 
     # get current time
-    time = now.strftime('%I:%M %p')
+    time = now.strftime('%I:%M %p') 
 
     return render(request, 
         'events/home.html', {
